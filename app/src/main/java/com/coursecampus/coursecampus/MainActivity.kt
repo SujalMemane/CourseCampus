@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.coursecampus.coursecampus.ui.theme.CourseCampusTheme
+import com.coursecampus.coursecampus.core.ui.theme.CourseCampusTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,4 +31,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// checking

@@ -1,4 +1,4 @@
-package com.coursecampus.coursecampus.ui.theme
+package com.coursecampus.coursecampus.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

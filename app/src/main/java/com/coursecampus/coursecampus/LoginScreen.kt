@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.coursecampus.coursecampus.ui.theme.DeepBlue
+import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable
 fun LoginScreen(navController: NavController) {

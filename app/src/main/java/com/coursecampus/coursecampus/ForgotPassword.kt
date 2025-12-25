@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.coursecampus.coursecampus.ui.theme.DeepBlue
+import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable
 fun ForgotPassword(navController: NavController) {

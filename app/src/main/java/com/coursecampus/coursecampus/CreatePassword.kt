@@ -1,7 +1,6 @@
 package com.coursecampus.coursecampus
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.coursecampus.coursecampus.ui.theme.DeepBlue
+import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable
 fun CreatePassword(navController: NavController) {
