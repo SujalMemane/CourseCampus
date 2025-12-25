@@ -113,17 +113,38 @@ fun MainScreen(navController: NavController) {
             }
         }
     ) { innerPadding ->
-        ContentScreen(modifier = Modifier.padding(innerPadding), selectedIndex)
+        ContentScreen(
+            modifier = Modifier.padding(innerPadding),
+            selectedIndex = selectedIndex,
+            onLogout = {
+                navController.navigate("login") {
+                    popUpTo(0)
+                }
+            },
+            onEditProfile = {
+                navController.navigate("createProfile")
+            }
+        )
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
-    when (selectedIndex) {
-        0 -> ChatBot()
-        1 -> SavedScreen()
-        2 -> com.coursecampus.coursecampus.feature.home.HomeScreen()
-        3 -> CoursesScreen()
-        4 -> ProfileScreen()
+fun ContentScreen(
+    modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    onLogout: () -> Unit,
+    onEditProfile: () -> Unit
+) {
+    Box(modifier = modifier) {
+        when (selectedIndex) {
+            0 -> ChatBot()
+            1 -> SavedScreen()
+            2 -> com.coursecampus.coursecampus.feature.home.HomeScreen()
+            3 -> CoursesScreen()
+            4 -> ProfileScreen(
+                onLogout = onLogout,
+                onEditProfile = onEditProfile
+            )
+        }
     }
 }

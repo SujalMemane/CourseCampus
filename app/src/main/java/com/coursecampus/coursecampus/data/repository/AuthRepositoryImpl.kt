@@ -1,18 +1,21 @@
 package com.coursecampus.coursecampus.data.repository
 
+import com.coursecampus.coursecampus.domain.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseDatabase: FirebaseDatabase
 ) : AuthRepository {
 
-    override suspend fun signUp(email: String, password: String, username: String): Result<FirebaseUser> {
+    override suspend fun signUp(email: String, password: String, username: String, dateOfBirth: String): Result<FirebaseUser> {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val user = result.user
@@ -23,6 +26,15 @@ class AuthRepositoryImpl @Inject constructor(
                     .setDisplayName(username)
                     .build()
                 it.updateProfile(profileUpdates).await()
+                
+                // Also store in RTDB
+                val newUser = User(
+                    uid = it.uid,
+                    name = username,
+                    email = email,
+                    dateOfBirth = dateOfBirth
+                )
+                firebaseDatabase.getReference("users").child(it.uid).setValue(newUser).await()
             }
             
             if (user != null) {

@@ -31,7 +31,7 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = _authState.value.copy(isLoading = true, error = null)
             
-            val result = authRepository.signUp(email, password, username)
+            val result = authRepository.signUp(email, password, username, dateOfBirth)
             
             result.fold(
                 onSuccess = { user ->

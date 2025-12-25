@@ -1,4 +1,4 @@
-package com.example.coursecampus.ui.screens
+package com.coursecampus.coursecampus.feature.profile
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -22,11 +22,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.coursecampus.coursecampus.R
 
 @Composable
-fun CreateProfile(navController: NavController) {
+fun CreateProfile(
+    onBack: () -> Unit,
+    onComplete: () -> Unit,
+    viewModel: CreateProfileViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
     val isDark = isSystemInDarkTheme()
     val textColor = if (isDark) Color.White else Color.Black
     val deepBlue = Color(0xFF007AFF)
@@ -36,22 +41,21 @@ fun CreateProfile(navController: NavController) {
     val qualificationOptions = listOf("High School", "Diploma", "Bachelor's", "Master's", "PhD")
     val yearOptions = (2000..2025).map { it.toString() }
 
-    var form by remember { mutableStateOf(RegistrationForm()) }
     var isSubmitClicked by remember { mutableStateOf(false) }
 
     val fields = listOf(
-        form.name, form.gender, form.address,
-        form.category, form.highestQualification,
-        form.yearOfPassing, form.universityName,
-        form.courseName, form.marks, form.interestedField, form.goals
+        uiState.name, uiState.gender, uiState.address,
+        uiState.category, uiState.highestQualification,
+        uiState.yearOfPassing, uiState.universityName,
+        uiState.courseName, uiState.marks, uiState.interestedField, uiState.goals
     )
     val completedFields = fields.count { it.isNotBlank() }
     val progress by animateFloatAsState(
-        targetValue = completedFields / fields.size.toFloat(),
+        targetValue = if (fields.isEmpty()) 0f else completedFields / fields.size.toFloat(),
         label = "Progress"
     )
 
-    val profilePic = when (form.gender) {
+    val profilePic = when (uiState.gender) {
         "Male" -> R.drawable.ic_male
         "Female" -> R.drawable.ic_female
         else -> R.drawable.ic_other
@@ -61,8 +65,7 @@ fun CreateProfile(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Box(modifier = Modifier.fillMaxSize().imePadding()
-        ) {
+        Box(modifier = Modifier.fillMaxSize().imePadding()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -71,7 +74,7 @@ fun CreateProfile(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Create Profile",
+                    text = "Edit Profile",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = textColor,
@@ -84,7 +87,7 @@ fun CreateProfile(navController: NavController) {
                     item {
                         Box(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
                                 .wrapContentSize(Alignment.Center)
                         ) {
                             Image(
@@ -97,33 +100,33 @@ fun CreateProfile(navController: NavController) {
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                     }
-                    item { CustomInput("Name", form.name, isSubmitClicked, deepBlue) { form = form.copy(name = it) } }
+                    item { CustomInput("Name", uiState.name, isSubmitClicked, deepBlue) { viewModel.onNameChange(it) } }
                     item {
-                        CustomDropdown("Gender", genderOptions, form.gender, isSubmitClicked, deepBlue) {
-                            form = form.copy(gender = it)
+                        CustomDropdown("Gender", genderOptions, uiState.gender, isSubmitClicked, deepBlue) {
+                            viewModel.onGenderChange(it)
                         }
                     }
-                    item { CustomInput("Address / Location", form.address, isSubmitClicked, deepBlue) { form = form.copy(address = it) } }
+                    item { CustomInput("Address / Location", uiState.address, isSubmitClicked, deepBlue) { viewModel.onAddressChange(it) } }
                     item {
-                        CustomDropdown("Category", categoryOptions, form.category, isSubmitClicked, deepBlue) {
-                            form = form.copy(category = it)
-                        }
-                    }
-                    item {
-                        CustomDropdown("Highest Qualification", qualificationOptions, form.highestQualification, isSubmitClicked, deepBlue) {
-                            form = form.copy(highestQualification = it)
+                        CustomDropdown("Category", categoryOptions, uiState.category, isSubmitClicked, deepBlue) {
+                            viewModel.onCategoryChange(it)
                         }
                     }
                     item {
-                        CustomDropdown("Year of Passing", yearOptions, form.yearOfPassing, isSubmitClicked, deepBlue) {
-                            form = form.copy(yearOfPassing = it)
+                        CustomDropdown("Highest Qualification", qualificationOptions, uiState.highestQualification, isSubmitClicked, deepBlue) {
+                            viewModel.onQualificationChange(it)
                         }
                     }
-                    item { CustomInput("University / College Name", form.universityName, isSubmitClicked, deepBlue) { form = form.copy(universityName = it) } }
-                    item { CustomInput("Course / Degree Name", form.courseName, isSubmitClicked, deepBlue) { form = form.copy(courseName = it) } }
-                    item { CustomInput("Marks / CGPA", form.marks, isSubmitClicked, deepBlue) { form = form.copy(marks = it) } }
-                    item { CustomInput("Interested Field / Domain", form.interestedField, isSubmitClicked, deepBlue) { form = form.copy(interestedField = it) } }
-                    item { CustomInput("Career or Learning Goals", form.goals, isSubmitClicked, deepBlue) { form = form.copy(goals = it) } }
+                    item {
+                        CustomDropdown("Year of Passing", yearOptions, uiState.yearOfPassing, isSubmitClicked, deepBlue) {
+                            viewModel.onYearChange(it)
+                        }
+                    }
+                    item { CustomInput("University / College Name", uiState.universityName, isSubmitClicked, deepBlue) { viewModel.onUniversityChange(it) } }
+                    item { CustomInput("Course / Degree Name", uiState.courseName, isSubmitClicked, deepBlue) { viewModel.onCourseChange(it) } }
+                    item { CustomInput("Marks / CGPA", uiState.marks, isSubmitClicked, deepBlue) { viewModel.onMarksChange(it) } }
+                    item { CustomInput("Interested Field / Domain", uiState.interestedField, isSubmitClicked, deepBlue) { viewModel.onInterestChange(it) } }
+                    item { CustomInput("Career or Learning Goals", uiState.goals, isSubmitClicked, deepBlue) { viewModel.onGoalsChange(it) } }
                 }
             }
 
@@ -141,31 +144,31 @@ fun CreateProfile(navController: NavController) {
                     label = "ProgressBarWidth"
                 )
 
-                // Main progress bar with rounded end
                 Row(
                     modifier = Modifier
                         .height(48.dp)
                         .clip(RoundedCornerShape(48.dp))
                         .background(deepBlue)
-                        .width(animatedProgress + iconSize / 2) // This makes the bar extend to icon center
+                        .width(animatedProgress + iconSize / 2)
                 ) {}
 
-                // Floating Icon at the tip
                 IconButton(
                     onClick = {
                         isSubmitClicked = true
-                        if (form.isValid()) {
-                            navController.navigate("createPassword")
+                        if (uiState.isValid()) {
+                            viewModel.saveProfile {
+                                onComplete()
+                            }
                         }
                     },
                     modifier = Modifier
                         .size(iconSize)
-                        .offset(x = animatedProgress-24.dp)
+                        .offset(x = animatedProgress - 24.dp)
                         .align(Alignment.CenterStart)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_next),
-                        contentDescription = "Next",
+                        contentDescription = "Save",
                         tint = Color.Unspecified,
                         modifier = Modifier.size(48.dp)
                     )
@@ -186,8 +189,7 @@ fun CustomInput(label: String, value: String, isSubmitClicked: Boolean, focusedC
         onValueChange = onValueChange,
         label = { Text(label, color = if (isError) Color.Red else textColor) },
         isError = isError,
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         textStyle = androidx.compose.ui.text.TextStyle(color = textColor),
         colors = OutlinedTextFieldDefaults.colors(
@@ -231,7 +233,6 @@ fun CustomDropdown(label: String, options: List<String>, selected: String, isSub
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
-
         ) {
             options.forEach {
                 DropdownMenuItem(
@@ -243,34 +244,5 @@ fun CustomDropdown(label: String, options: List<String>, selected: String, isSub
                 )
             }
         }
-    }
-}
-
-// Data class for form
-data class RegistrationForm(
-    var name: String = "",
-    var gender: String = "Other",
-    var address: String = "",
-    var category: String = "",
-    var highestQualification: String = "",
-    var yearOfPassing: String = "",
-    var universityName: String = "",
-    var courseName: String = "",
-    var marks: String = "",
-    var interestedField: String = "",
-    var goals: String = ""
-) {
-    fun isValid(): Boolean {
-        return name.isNotBlank() &&
-                gender.isNotBlank() &&
-                address.isNotBlank() &&
-                category.isNotBlank() &&
-                highestQualification.isNotBlank() &&
-                yearOfPassing.isNotBlank() &&
-                universityName.isNotBlank() &&
-                courseName.isNotBlank() &&
-                marks.isNotBlank() &&
-                interestedField.isNotBlank() &&
-                goals.isNotBlank()
     }
 }
