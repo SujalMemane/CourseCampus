@@ -1,11 +1,9 @@
-package com.coursecampus.coursecampus
-
+package com.coursecampus.coursecampus.feature.saved
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CoursesScreen(modifier: Modifier = Modifier) {
+fun SavedScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -24,7 +22,7 @@ fun CoursesScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally // Corrected from HorizontalAlignment to horizontalAlignment
     ) {
         Text(
-            text = "Courses Screen",
+            text = "Saved Screen",
             fontSize = 48.sp, // Corrected from FontSzie to fontSize
             fontWeight = FontWeight.Bold,
             color = Color.White

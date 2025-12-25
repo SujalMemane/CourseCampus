@@ -1,4 +1,4 @@
-package com.coursecampus.coursecampus
+package com.coursecampus.coursecampus.navigation
 
 data class NavItem(
     val label : String,

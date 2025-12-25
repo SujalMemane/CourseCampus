@@ -1,4 +1,5 @@
-package com.coursecampus.coursecampus
+package com.coursecampus.coursecampus.feature.home
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ChatBot(modifier: Modifier = Modifier) {
+fun CoursesScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -22,8 +23,8 @@ fun ChatBot(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally // Corrected from HorizontalAlignment to horizontalAlignment
     ) {
         Text(
-            text = "ChatBot Screen",
-            fontSize = 48.sp,
+            text = "Courses Screen",
+            fontSize = 48.sp, // Corrected from FontSzie to fontSize
             fontWeight = FontWeight.Bold,
             color = Color.White
         )

@@ -1,4 +1,4 @@
-package com.coursecampus.coursecampus
+package com.coursecampus.coursecampus.feature.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.coursecampus.coursecampus.R
 import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable

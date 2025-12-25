@@ -1,4 +1,4 @@
-package com.coursecampus.coursecampus
+package com.coursecampus.coursecampus.navigation
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -20,6 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
+import com.coursecampus.coursecampus.feature.chatbot.ChatBot
+import com.coursecampus.coursecampus.feature.home.CoursesScreen
+import com.coursecampus.coursecampus.feature.profile.ProfileScreen
+import com.coursecampus.coursecampus.R
+import com.coursecampus.coursecampus.feature.saved.SavedScreen
 import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable
@@ -117,7 +122,7 @@ fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int) {
     when (selectedIndex) {
         0 -> ChatBot()
         1 -> SavedScreen()
-        2 -> HomeScreen()
+        2 -> com.coursecampus.coursecampus.feature.home.HomeScreen()
         3 -> CoursesScreen()
         4 -> ProfileScreen()
     }
