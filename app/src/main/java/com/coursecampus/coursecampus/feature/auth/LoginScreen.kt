@@ -23,19 +23,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.coursecampus.coursecampus.R
 import com.coursecampus.coursecampus.core.ui.theme.DeepBlue
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: AuthViewModel = hiltViewModel()
+) {
+    val authState by viewModel.authState.collectAsStateWithLifecycle()
     val isDarkTheme = isSystemInDarkTheme()
     val textColor = if (isDarkTheme) Color.White else Color.Black
     val borderColor = if (isDarkTheme) Color.White else Color.Black
     val tintColor = if (isDarkTheme) Color.White else Color.Black
     val cardColor = if (isDarkTheme) Color(0xFF1E1E1E) else Color.White
-
 
     val context = LocalContext.current
 
@@ -44,8 +49,23 @@ fun LoginScreen(navController: NavController) {
     var passwordVisible by remember { mutableStateOf(false) }
     var isSubmitClicked by remember { mutableStateOf(false) }
 
-    val isEmailError = (email.isBlank() || !email.endsWith("@gmail.com")) && isSubmitClicked
+    val isEmailError = (email.isBlank() || !email.contains("@")) && isSubmitClicked
     val isPasswordError = password.isBlank() && isSubmitClicked
+
+    // Handle auth state changes
+    LaunchedEffect(authState) {
+        if (authState.isLoggedIn) {
+            Toast.makeText(context, "Logged in successfully ✅", Toast.LENGTH_SHORT).show()
+            navController.navigate("mainScreen") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+        
+        authState.error?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            viewModel.clearError()
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -163,18 +183,18 @@ fun LoginScreen(navController: NavController) {
                             onClick = {
                                 isSubmitClicked = true
                                 when {
-                                    email.isBlank() || !email.endsWith("@gmail.com") -> {
-                                        Toast.makeText(context, "Enter a valid Gmail address", Toast.LENGTH_SHORT).show()
+                                    email.isBlank() || !email.contains("@") -> {
+                                        Toast.makeText(context, "Enter a valid email address", Toast.LENGTH_SHORT).show()
                                     }
                                     password.isBlank() -> {
                                         Toast.makeText(context, "Enter your password", Toast.LENGTH_SHORT).show()
                                     }
                                     else -> {
-                                        Toast.makeText(context, "Logged in successfully ✅", Toast.LENGTH_SHORT).show()
-                                        navController.navigate("mainScreen")
+                                        viewModel.signIn(email, password)
                                     }
                                 }
                             },
+                            enabled = !authState.isLoading,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = DeepBlue,
                                 contentColor = Color.White
@@ -184,7 +204,14 @@ fun LoginScreen(navController: NavController) {
                                 .fillMaxWidth()
                                 .height(50.dp)
                         ) {
-                            Text("Login")
+                            if (authState.isLoading) {
+                                CircularProgressIndicator(
+                                    color = Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            } else {
+                                Text("Login")
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -218,7 +245,7 @@ fun LoginScreen(navController: NavController) {
                         color = DeepBlue,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable {
-                            navController.navigate("createProfile")
+                            navController.navigate("register")
                         }
                     )
                 }
