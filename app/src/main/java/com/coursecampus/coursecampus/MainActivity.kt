@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.coursecampus.coursecampus.core.ui.theme.CourseCampusTheme
-import com.coursecampus.coursecampus.navigation.AppNavigation
+import com.coursecampus.coursecampus.ui.navigation.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CourseCampusTheme {
-                AppNavigation()
+                NavGraph()
             }
         }
     }
